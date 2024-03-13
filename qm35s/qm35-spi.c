@@ -1052,7 +1052,7 @@ poweroff:
 	return ret;
 }
 
-static void qm35_remove(struct spi_device *spi)
+static int qm35_remove(struct spi_device *spi)
 {
 	struct qm35_ctx *qm35_hdl = spi_get_drvdata(spi);
 
@@ -1077,6 +1077,8 @@ static void qm35_remove(struct spi_device *spi)
 
 	dev_info(&spi->dev, "Deregistered: [%s] misc device\n",
 		 qm35_hdl->uci_dev.name);
+
+	return 0;
 }
 
 #ifdef CONFIG_PM_SLEEP
@@ -1101,6 +1103,7 @@ static int qm35_pm_resume(struct device *dev)
 
 static SIMPLE_DEV_PM_OPS(qm35_spi_ops, qm35_pm_suspend, qm35_pm_resume);
 
+#define pm_sleep_ptr(_ptr) (IS_ENABLED(CONFIG_PM_SLEEP) ? (_ptr) : NULL)
 static struct spi_driver qm35_spi_driver = {
 	.driver = {
 		.name           = "qm35",
