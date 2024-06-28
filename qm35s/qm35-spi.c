@@ -37,6 +37,7 @@
 #include <linux/spinlock.h>
 #include <linux/miscdevice.h>
 #include <linux/poll.h>
+#include <linux/pm.h>
 #include <linux/uaccess.h>
 #include <linux/firmware.h>
 #include <linux/completion.h>
@@ -1109,7 +1110,9 @@ static int qm35_pm_resume(struct device *dev)
 
 static SIMPLE_DEV_PM_OPS(qm35_spi_ops, qm35_pm_suspend, qm35_pm_resume);
 
+#ifndef pm_sleep_ptr
 #define pm_sleep_ptr(_ptr) (IS_ENABLED(CONFIG_PM_SLEEP) ? (_ptr) : NULL)
+#endif
 static struct spi_driver qm35_spi_driver = {
 	.driver = {
 		.name           = "qm35",
